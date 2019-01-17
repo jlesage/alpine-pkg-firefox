@@ -1,0 +1,39 @@
+kind: pipeline
+name: default
+
+workspace:
+  base: /workspace
+  path: src
+
+steps:
+
+- name: prepare
+  image: alpine:3.8
+  commands:
+  - mkdir /workspace/pkg
+
+- name: build
+  image: jlesage/alpine-abuild:3.8
+  environment:
+    PKG_SIGNING_KEY:
+      from_secret: alpine_key
+    PKG_SIGNING_KEY_NAME: jlesage.rsa
+    PKG_SRC_DIR: /workspace/src
+    PKG_DST_DIR: /workspace/pkg
+
+- name: publish  
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+      - pkg/*.apk
+    checksum:
+      - md5
+      - sha1
+      - sha256
+      - sha512
+  when:
+    event: tag
+    ref:
+    - refs/tags/*-alpine-3.8-x86_64
