@@ -22,9 +22,10 @@ steps:
   - curl -L -o aports.tar.gz https://github.com/alpinelinux/aports/archive/683ac6232089f61ae559f80fbdbb2467756ca9e7.tar.gz
 
 - name: extract
-  image: alpine
+  image: alpine:3.8
   commands:
-  - "tar xf aports.tar.gz --strip 3 aport-*/testing/firefox"
+  - apk --no-cache add tar
+  - "tar xf aports.tar.gz --wildcards --strip 3 aports-*/testing/firefox"
 
 - name: patch
   image: alpine
@@ -77,9 +78,10 @@ steps:
   - curl -L -o aports.tar.gz https://github.com/alpinelinux/aports/archive/683ac6232089f61ae559f80fbdbb2467756ca9e7.tar.gz
 
 - name: extract
-  image: alpine
+  image: alpine:3.8
   commands:
-  - "tar xf aports.tar.gz --strip 3 aport-*/testing/firefox"
+  - apk --no-cache add tar
+  - "tar xf aports.tar.gz --wildcards --strip 3 aports-*/testing/firefox"
 
 - name: patch
   image: alpine

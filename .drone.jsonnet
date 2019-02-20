@@ -27,9 +27,10 @@ local Pipeline(alpine_version) = {
     },
     {
       name: "extract",
-      image: "alpine",
+      image: "alpine:3.8",
       commands: [
-        "tar xf aports.tar.gz --strip 3 aport-*/"+ALPINE_REPO+"/"+ALPINE_PKG
+        "apk --no-cache add tar",
+        "tar xf aports.tar.gz --wildcards --strip 3 aports-*/"+ALPINE_REPO+"/"+ALPINE_PKG
       ]
     },
     {
