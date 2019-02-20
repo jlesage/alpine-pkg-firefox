@@ -1,0 +1,32 @@
+--- a/APKBUILD	2019-02-19 13:56:20.926644827 -0500
++++ b/APKBUILD	2019-01-22 20:06:26.151881548 -0500
+@@ -39,12 +39,8 @@
+ 	libxcomposite-dev
+ 	llvm5-dev
+ 	mesa-dev
+-	nspr-dev
+-	nss-dev
+-	nss-static
+ 	paxmark
+ 	python3-dev
+-	sqlite-dev
+ 	sed
+ 	startup-notification-dev
+ 	wireless-tools-dev
+@@ -124,7 +120,6 @@
+ 		--enable-pie \
+ 		--enable-startup-notification \
+ 		--enable-system-ffi \
+-		--enable-system-sqlite \
+ 		--enable-ffmpeg \
+ 		\
+ 		--with-system-bz2 \
+@@ -132,8 +127,6 @@
+ 		--with-system-jpeg \
+ 		--with-system-libevent \
+ 		--with-system-libvpx \
+-		--with-system-nspr \
+-		--with-system-nss \
+ 		--with-system-pixman \
+ 		--with-system-png \
+ 		--with-system-zlib \

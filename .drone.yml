@@ -1,39 +1,111 @@
+---
 kind: pipeline
-name: default
+name: alpine-3.8
+
+platform:
+  os: linux
+  arch: amd64
 
 workspace:
   base: /workspace
   path: src
 
 steps:
-
 - name: prepare
-  image: alpine:3.8
+  image: alpine
   commands:
   - mkdir /workspace/pkg
+
+- name: download
+  image: byrnedo/alpine-curl
+  commands:
+  - curl -L -o aports.tar.gz https://github.com/alpinelinux/aports/archive/683ac6232089f61ae559f80fbdbb2467756ca9e7.tar.gz
+
+- name: extract
+  image: alpine
+  commands:
+  - "tar xf aports.tar.gz --strip 3 aport-*/testing/firefox"
+
+- name: patch
+  image: alpine
+  commands:
+  - "[ ! -f patches/3.8.patch ] || patch -p1 -i patches/3.8.patch"
 
 - name: build
   image: jlesage/alpine-abuild:3.8
   environment:
+    PKG_DST_DIR: /workspace/pkg
     PKG_SIGNING_KEY:
       from_secret: alpine_key
     PKG_SIGNING_KEY_NAME: jlesage.rsa
     PKG_SRC_DIR: /workspace/src
-    PKG_DST_DIR: /workspace/pkg
 
-- name: publish  
+- name: publish
   image: plugins/github-release
   settings:
     api_key:
       from_secret: github_token
-    files:
-      - pkg/*.apk
     checksum:
-      - md5
-      - sha1
-      - sha256
-      - sha512
-  when:
-    event: tag
-    ref:
-    - refs/tags/*-alpine-3.8-x86_64
+    - md5
+    - sha1
+    - sha256
+    - sha512
+    files:
+    - "pkg/*.apk"
+
+---
+kind: pipeline
+name: alpine-3.9
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /workspace
+  path: src
+
+steps:
+- name: prepare
+  image: alpine
+  commands:
+  - mkdir /workspace/pkg
+
+- name: download
+  image: byrnedo/alpine-curl
+  commands:
+  - curl -L -o aports.tar.gz https://github.com/alpinelinux/aports/archive/683ac6232089f61ae559f80fbdbb2467756ca9e7.tar.gz
+
+- name: extract
+  image: alpine
+  commands:
+  - "tar xf aports.tar.gz --strip 3 aport-*/testing/firefox"
+
+- name: patch
+  image: alpine
+  commands:
+  - "[ ! -f patches/3.9.patch ] || patch -p1 -i patches/3.9.patch"
+
+- name: build
+  image: jlesage/alpine-abuild:3.9
+  environment:
+    PKG_DST_DIR: /workspace/pkg
+    PKG_SIGNING_KEY:
+      from_secret: alpine_key
+    PKG_SIGNING_KEY_NAME: jlesage.rsa
+    PKG_SRC_DIR: /workspace/src
+
+- name: publish
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    checksum:
+    - md5
+    - sha1
+    - sha256
+    - sha512
+    files:
+    - "pkg/*.apk"
+
+...
