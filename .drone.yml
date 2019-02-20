@@ -41,6 +41,12 @@ steps:
     PKG_SIGNING_KEY_NAME: jlesage.rsa
     PKG_SRC_DIR: /workspace/src
 
+- name: rename
+  image: perl:5.28-slim
+  commands:
+  - cpanm -n File::Rename
+  - "rename -n 's/(.*).apk$/$1-alpine-3.8-x86_64.apk/' pkg/*.apk"
+
 - name: publish
   image: plugins/github-release
   settings:
@@ -96,6 +102,12 @@ steps:
       from_secret: alpine_key
     PKG_SIGNING_KEY_NAME: jlesage.rsa
     PKG_SRC_DIR: /workspace/src
+
+- name: rename
+  image: perl:5.28-slim
+  commands:
+  - cpanm -n File::Rename
+  - "rename -n 's/(.*).apk$/$1-alpine-3.9-x86_64.apk/' pkg/*.apk"
 
 - name: publish
   image: plugins/github-release

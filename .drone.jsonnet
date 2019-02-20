@@ -53,6 +53,14 @@ local Pipeline(alpine_version) = {
       },
     },
     {
+      name: "rename",
+      image: "perl:5.28-slim",
+      commands: [
+        "cpanm -n File::Rename",
+        "rename -n 's/(.*).apk$/$1-alpine-"+alpine_version+"-x86_64.apk/' pkg/*.apk"
+      ]
+    },
+    {
       name: "publish",
       image: "plugins/github-release",
       settings: {
