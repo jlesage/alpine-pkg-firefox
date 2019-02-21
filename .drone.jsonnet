@@ -57,7 +57,10 @@ local Pipeline(alpine_version) = {
       image: "perl:5.28-slim",
       commands: [
         "cpanm -n File::Rename",
-        "rename -n 's/(.*).apk$/$1-alpine-"+alpine_version+"-x86_64.apk/' pkg/*.apk"
+        "pwd",
+        "ls -l .",
+        "find pkg",
+        "rename --verbose 's/(.*).apk$/$1-alpine-"+alpine_version+"-x86_64.apk/' pkg/*.apk"
       ]
     },
     {
