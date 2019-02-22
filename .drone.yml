@@ -45,10 +45,8 @@ steps:
   image: perl:5.28-slim
   commands:
   - cpanm -n File::Rename
-  - pwd
-  - ls -l .
-  - find pkg
-  - "rename --verbose 's/(.*).apk$/$1-alpine-3.8-x86_64.apk/' pkg/*.apk"
+  - find /workspace/pkg
+  - "rename --verbose 's/(.*).apk$/$1-alpine-3.8-x86_64.apk/' /workspace/pkg/*.apk"
 
 - name: publish
   image: plugins/github-release
@@ -61,7 +59,7 @@ steps:
     - sha256
     - sha512
     files:
-    - "pkg/*.apk"
+    - "/workspace/pkg/*.apk"
   when:
     event:
     - tag
@@ -113,10 +111,8 @@ steps:
   image: perl:5.28-slim
   commands:
   - cpanm -n File::Rename
-  - pwd
-  - ls -l .
-  - find pkg
-  - "rename --verbose 's/(.*).apk$/$1-alpine-3.9-x86_64.apk/' pkg/*.apk"
+  - find /workspace/pkg
+  - "rename --verbose 's/(.*).apk$/$1-alpine-3.9-x86_64.apk/' /workspace/pkg/*.apk"
 
 - name: publish
   image: plugins/github-release
@@ -129,7 +125,7 @@ steps:
     - sha256
     - sha512
     files:
-    - "pkg/*.apk"
+    - "/workspace/pkg/*.apk"
   when:
     event:
     - tag

@@ -57,10 +57,8 @@ local Pipeline(alpine_version) = {
       image: "perl:5.28-slim",
       commands: [
         "cpanm -n File::Rename",
-        "pwd",
-        "ls -l .",
-        "find pkg",
-        "rename --verbose 's/(.*).apk$/$1-alpine-"+alpine_version+"-x86_64.apk/' pkg/*.apk"
+        "find /workspace/pkg",
+        "rename --verbose 's/(.*).apk$/$1-alpine-"+alpine_version+"-x86_64.apk/' /workspace/pkg/*.apk"
       ]
     },
     {
@@ -71,7 +69,7 @@ local Pipeline(alpine_version) = {
           from_secret: "github_token"
         },
         files: [
-          "pkg/*.apk"
+          "/workspace/pkg/*.apk"
         ],
         checksum: [
           "md5",
